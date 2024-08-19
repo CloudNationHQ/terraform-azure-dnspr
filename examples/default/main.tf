@@ -33,7 +33,7 @@ module "network" {
 
 module "resolver" {
   source  = "cloudnationhq/dnspr/azure"
-  version = "~> 0.1"
+  version = "~> 1.0"
 
   instance = {
     name               = module.naming.private_dns_resolver.name
