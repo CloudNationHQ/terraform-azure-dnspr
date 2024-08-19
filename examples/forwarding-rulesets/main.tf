@@ -58,7 +58,7 @@ module "network" {
 
 module "dnsresolver" {
   source  = "cloudnationhq/dnspr/azure"
-  version = "~> 0.1"
+  version = "~> 1.0"
 
   naming = local.naming
 
