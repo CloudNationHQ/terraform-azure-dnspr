@@ -45,10 +45,11 @@ resource "azurerm_private_dns_resolver_outbound_endpoint" "outbound" {
 }
 
 
+# forwarding rulesets
 resource "azurerm_private_dns_resolver_dns_forwarding_ruleset" "sets" {
   for_each = merge([
-    for ep_key, ep in var.instance.outbound_endpoints :
-    lookup(ep, "forwarding_ruleset", null) != null ? {
+    for ep_key, ep in lookup(var.instance, "outbound_endpoints", {}) :
+    lookup(ep, "forwarding_rulesets", null) != null ? {
       for ruleset_key, ruleset in ep.forwarding_rulesets : "${ep_key}-${ruleset_key}" => {
         name            = try(ruleset.name, null)
         outbound_ep_key = ep_key
@@ -71,9 +72,9 @@ resource "azurerm_private_dns_resolver_dns_forwarding_ruleset" "sets" {
 # forwarding rules
 resource "azurerm_private_dns_resolver_forwarding_rule" "rules" {
   for_each = merge(flatten([
-    for ep_key, ep in var.instance.outbound_endpoints :
+    for ep_key, ep in lookup(var.instance, "outbound_endpoints", {}) :
     lookup(ep, "forwarding_ruleset", null) != null ? [
-      for ruleset_key, ruleset in ep.forwarding_ruleset :
+      for ruleset_key, ruleset in lookup(ep, "forwarding_ruleset", {}) :
       lookup(ruleset, "rules", null) != null ? {
         for rule_key, rule in ruleset.rules : rule_key => merge(rule, {
           ep_key      = ep_key
@@ -105,9 +106,9 @@ resource "azurerm_private_dns_resolver_forwarding_rule" "rules" {
 # virtual network links
 resource "azurerm_private_dns_resolver_virtual_network_link" "links" {
   for_each = merge(flatten([
-    for ep_key, ep in var.instance.outbound_endpoints :
+    for ep_key, ep in lookup(var.instance, "outbound_endpoints", {}) :
     lookup(ep, "forwarding_ruleset", null) != null ? [
-      for ruleset_key, ruleset in ep.forwarding_ruleset :
+      for ruleset_key, ruleset in lookup(ep, "forwarding_ruleset", {}) :
       lookup(ruleset, "virtual_network_links", null) != null ? {
         for link_key, link in ruleset.virtual_network_links :
         link_key => merge(link, {
