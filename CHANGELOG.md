@@ -5,11 +5,15 @@
 
 ### ⚠ BREAKING CHANGES
 
-* * Version 4 of the azurerm provider includes breaking changes.
+* Version 4 of the azurerm provider includes breaking changes.
 
 ### Features
 
 * upgrade azurerm provder to v4 ([#9](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/9)) ([8d7f0c6](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/8d7f0c6f476767f4f88a3654d83c46a75f15e729))
+
+### Upgrade from v1.1.0 to v2.0.0:
+
+- Update module reference to: `version = "~> 2.0"`
 
 ## [1.1.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v1.0.1...v1.1.0) (2024-09-06)
 
