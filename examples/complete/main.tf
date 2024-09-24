@@ -7,7 +7,7 @@ module "naming" {
 
 module "rg" {
   source  = "cloudnationhq/rg/azure"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   groups = {
     demo = {
@@ -19,7 +19,7 @@ module "rg" {
 
 module "network2" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   naming = local.naming
 
@@ -34,7 +34,7 @@ module "network2" {
 
 module "network1" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   naming = local.naming
 
@@ -73,7 +73,7 @@ module "network1" {
 
 module "dnsresolver" {
   source  = "cloudnationhq/dnspr/azure"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   naming = local.naming
 
