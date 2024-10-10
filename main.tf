@@ -102,3 +102,28 @@ resource "azurerm_private_dns_resolver_forwarding_rule" "rules" {
     }
   }
 }
+
+# virtual network links
+resource "azurerm_private_dns_resolver_virtual_network_link" "links" {
+  for_each = merge(flatten([
+    for ep_key, ep in lookup(var.instance, "outbound_endpoints", {}) :
+    lookup(ep, "forwarding_ruleset", null) != null ? [
+      for ruleset_key, ruleset in lookup(ep, "forwarding_ruleset", {}) :
+      lookup(ruleset, "virtual_network_links", null) != null ? {
+        for link_key, link in ruleset.virtual_network_links :
+        link_key => merge(link, {
+          ruleset_key = "${ep_key}-${ruleset_key}"
+          link_key    = link_key
+        })
+      } : {}
+    ] : []
+  ])...)
+
+  name = coalesce(
+    lookup(each.value, "name", null),
+    "${var.naming.private_dns_resolver_virtual_network_link}-${each.value.link_key}"
+  )
+
+  dns_forwarding_ruleset_id = azurerm_private_dns_resolver_dns_forwarding_ruleset.sets[each.value.ruleset_key].id
+  virtual_network_id        = each.value.virtual_network_id
+}
