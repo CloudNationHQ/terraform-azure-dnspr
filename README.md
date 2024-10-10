@@ -30,49 +30,55 @@ End-to-end testing is not conducted on these modules, as they are individual com
 - utilization of terratest for robust validation.
 - facilitates the integration of multiple virtual network links within a forwarding ruleset.
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.61 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.61 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 4.0 |
+
+## Modules
+
+No modules.
 
 ## Resources
 
 | Name | Type |
 |------|------|
-| [azurerm_private_dns_resolver](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) | resource |
-| [azurerm_private_dns_resolver_dns_forwarding_ruleset](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_dns_forwarding_ruleset) | resource |
-| [azurerm_private_dns_resolver_forwarding_rule](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_forwarding_rule) | resource |
-| [azurerm_private_dns_resolver_inbound_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_inbound_endpoint) | resource |
-| [azurerm_private_dns_resolver_outbound_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_outbound_endpoint) | resource |
-| [azurerm_private_dns_resolver_virtual_network_link](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_virtual_network_link) | resource |
+| [azurerm_private_dns_resolver.resolver](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) | resource |
+| [azurerm_private_dns_resolver_dns_forwarding_ruleset.sets](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_dns_forwarding_ruleset) | resource |
+| [azurerm_private_dns_resolver_forwarding_rule.rules](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_forwarding_rule) | resource |
+| [azurerm_private_dns_resolver_inbound_endpoint.inbound](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_inbound_endpoint) | resource |
+| [azurerm_private_dns_resolver_outbound_endpoint.outbound](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_outbound_endpoint) | resource |
+| [azurerm_private_dns_resolver_virtual_network_link.links](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_virtual_network_link) | resource |
 
 ## Inputs
 
-| Name | Description | Type | Required |
-| :-- | :-- | :-- | :-- |
-| `instance` | contains private dns resolver instance configuration | object | yes |
-| `naming` | contains naming convention	| string | yes |
-| `location` | default azure region to be used | string | no |
-| `resource_group` | default resource group to be used | string | no |
-| `tags` | tags to be added to the resources | map(string) | no |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_instance"></a> [instance](#input\_instance) | contains private dns resolver instance configuration | `any` | n/a | yes |
+| <a name="input_location"></a> [location](#input\_location) | default azure region to be used. | `string` | `null` | no |
+| <a name="input_naming"></a> [naming](#input\_naming) | contains naming convention | `map(string)` | `{}` | no |
+| <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | default resource group to be used. | `string` | `null` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | tags to be added to the resources | `map(string)` | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
-| :-- | :-- |
-| `instance` | contains private dns resolver instance configuration |
-| `inbound_endpoints` | contains private dns resolver inbound endpoints configuration |
-| `outbound_endpoints` | contains private dns resolver outbound endpoints configuration |
-| `forwarding_rulesets` | contains private dns resolver dns forwarding ruleset configuration |
-| `virtual_network_links` | contains private dns resolver dns virtual network links configuration |
+|------|-------------|
+| <a name="output_forwarding_rulesets"></a> [forwarding\_rulesets](#output\_forwarding\_rulesets) | contains private dns resolver dns forwarding ruleset configuration |
+| <a name="output_inbound_endpoints"></a> [inbound\_endpoints](#output\_inbound\_endpoints) | contains private dns resolver inbound endpoints configuration |
+| <a name="output_instance"></a> [instance](#output\_instance) | contains private dns resolver instance configuration |
+| <a name="output_outbound_endpoints"></a> [outbound\_endpoints](#output\_outbound\_endpoints) | contains private dns resolver outbound endpoints configuration |
+| <a name="output_virtual_network_links"></a> [virtual\_network\_links](#output\_virtual\_network\_links) | contains private dns resolver dns virtual network links configuration |
+<!-- END_TF_DOCS -->
 
 ## Testing
 
