@@ -44,10 +44,6 @@ End-to-end testing is not conducted on these modules, as they are individual com
 |------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 4.0 |
 
-## Modules
-
-No modules.
-
 ## Resources
 
 | Name | Type |
