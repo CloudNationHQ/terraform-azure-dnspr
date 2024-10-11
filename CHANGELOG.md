@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.0.0...v2.1.0) (2024-10-11)
+
+
+### Features
+
+* auto generated docs and refine makefile ([#12](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/12)) ([5999069](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/5999069381845c6b914242dc9100e17248e8d25a))
+* **deps:** bump github.com/gruntwork-io/terratest in /tests ([#11](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/11)) ([bd25e87](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/bd25e870c42075ae95a0256fa3318ebfd590b11a))
+
 ## [2.0.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v1.1.0...v2.0.0) (2024-09-24)
 
 
