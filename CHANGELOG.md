@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.1.0...v2.2.0) (2024-11-12)
+
+
+### Features
+
+* enhance testing with sequential, parallel modes and flags for exceptions and skip-destroy ([#14](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/14)) ([9c9c3e5](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/9c9c3e5de12cdb0b5233b6ef5720693e1db99e4b))
+
 ## [2.1.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.0.0...v2.1.0) (2024-10-11)
 
 
