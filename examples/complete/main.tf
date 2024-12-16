@@ -17,24 +17,9 @@ module "rg" {
   }
 }
 
-module "network2" {
+module "network_dnspr" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 4.0"
-
-  naming = local.naming
-
-  vnet = {
-    name           = "vnet-demo-res2"
-    location       = module.rg.groups.demo.location
-    resource_group = module.rg.groups.demo.name
-    cidr           = ["10.20.0.0/16"]
-  }
-}
-
-
-module "network1" {
-  source  = "cloudnationhq/vnet/azure"
-  version = "~> 4.0"
+  version = "~> 8.0"
 
   naming = local.naming
 
@@ -42,11 +27,11 @@ module "network1" {
     name           = module.naming.virtual_network.name
     location       = module.rg.groups.demo.location
     resource_group = module.rg.groups.demo.name
-    cidr           = ["10.19.0.0/16"]
+    address_space  = ["10.19.0.0/16"]
 
     subnets = {
       inbound = {
-        cidr = ["10.19.99.0/27"]
+        address_prefixes = ["10.19.99.0/27"]
         delegations = {
           dns = {
             name = "Microsoft.Network/dnsResolvers"
@@ -57,7 +42,7 @@ module "network1" {
         }
       }
       outbound = {
-        cidr = ["10.19.101.0/27"]
+        address_prefixes = ["10.19.101.0/27"]
         delegations = {
           dns = {
             name = "Microsoft.Network/dnsResolvers"
@@ -71,9 +56,24 @@ module "network1" {
   }
 }
 
+module "network_spoke" {
+  source  = "cloudnationhq/vnet/azure"
+  version = "~> 8.0"
+
+  naming = local.naming
+
+  vnet = {
+    name           = "vnet-demo-res2"
+    location       = module.rg.groups.demo.location
+    resource_group = module.rg.groups.demo.name
+    address_space  = ["10.20.0.0/16"]
+  }
+}
+
 module "dnsresolver" {
-  source  = "cloudnationhq/dnspr/azure"
-  version = "~> 2.0"
+  # source  = "cloudnationhq/dnspr/azure"
+  # version = "~> 2.0"
+  source = "../../"
 
   naming = local.naming
 
@@ -81,30 +81,60 @@ module "dnsresolver" {
     name               = module.naming.private_dns_resolver.name
     location           = module.rg.groups.demo.location
     resource_group     = module.rg.groups.demo.name
-    virtual_network_id = module.network1.vnet.id
+    virtual_network_id = module.network_dnspr.vnet.id
 
     inbound_endpoints = {
       ep1 = {
         ip_configurations = {
           config1 = {
-            subnet_id = module.network1.subnets.inbound.id
+            subnet_id = module.network_dnspr.subnets.inbound.id
           }
         }
       }
     }
     outbound_endpoints = {
       ep1 = {
-        subnet_id = module.network1.subnets.outbound.id
+        subnet_id = module.network_dnspr.subnets.outbound.id
         forwarding_rulesets = {
           ruleset1 = {
             virtual_network_links = {
               link1 = {
-                virtual_network_id = module.network2.vnet.id
+                virtual_network_id = module.network_spoke.vnet.id
               }
+            }
+            rules = {
+              rule1 = {
+                domain_name = "example.com."
+                enabled     = true
+                target_dns_servers = {
+                  target1 = {
+                    ip_address = "10.1.1.1"
+                    port       = 53
+                  }
+                  target2 = {
+                    ip_address = "10.1.1.2"
+                  }
+                }
+              }
+              rule2 = {
+                domain_name = "example2.com."
+                target_dns_servers = {
+                  target1 = {
+                    ip_address = "10.2.2.2"
+                    port       = 53
+                  }
+                }
+              }
+            }
+            tags = {
+              ruleset_tag = "ruleset1"
             }
           }
         }
       }
+    }
+    tags = {
+      environment = "demo"
     }
   }
 }

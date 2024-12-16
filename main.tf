@@ -27,6 +27,8 @@ resource "azurerm_private_dns_resolver_inbound_endpoint" "inbound" {
       subnet_id                    = ip_configurations.value.subnet_id
     }
   }
+
+  tags = try(var.instance.tags, var.tags)
 }
 
 # outbound endpoints
@@ -42,88 +44,46 @@ resource "azurerm_private_dns_resolver_outbound_endpoint" "outbound" {
   private_dns_resolver_id = azurerm_private_dns_resolver.resolver.id
   location                = coalesce(lookup(var.instance, "location", null), var.location)
   subnet_id               = each.value.subnet_id
+
+  tags = try(var.instance.tags, var.tags)
 }
 
 
 # forwarding rulesets
 resource "azurerm_private_dns_resolver_dns_forwarding_ruleset" "sets" {
-  for_each = merge([
-    for ep_key, ep in lookup(var.instance, "outbound_endpoints", {}) :
-    lookup(ep, "forwarding_rulesets", null) != null ? {
-      for ruleset_key, ruleset in ep.forwarding_rulesets : "${ep_key}-${ruleset_key}" => {
-        name            = try(ruleset.name, null)
-        outbound_ep_key = ep_key
-        ruleset_key     = ruleset_key
-      }
-    } : {}
-  ]...)
+  for_each = local.rulesets != {} ? { for ruleset in local.rulesets : ruleset.key => ruleset } : {}
 
-  name = coalesce(
-    each.value.name,
-    "${var.naming.private_dns_resolver_dns_forwarding_ruleset}-${each.value.ruleset_key}"
-  )
-
-  resource_group_name                        = var.instance.resource_group
-  location                                   = var.instance.location
+  name                                       = each.value.name
+  resource_group_name                        = coalesce(lookup(var.instance, "resource_group", null), var.resource_group)
+  location                                   = coalesce(lookup(var.instance, "location", null), var.location)
   private_dns_resolver_outbound_endpoint_ids = [azurerm_private_dns_resolver_outbound_endpoint.outbound[each.value.outbound_ep_key].id]
-  tags                                       = try(var.instance.tags, {})
+  tags                                       = each.value.tags
 }
 
 # forwarding rules
 resource "azurerm_private_dns_resolver_forwarding_rule" "rules" {
-  for_each = merge(flatten([
-    for ep_key, ep in lookup(var.instance, "outbound_endpoints", {}) :
-    lookup(ep, "forwarding_ruleset", null) != null ? [
-      for ruleset_key, ruleset in lookup(ep, "forwarding_ruleset", {}) :
-      lookup(ruleset, "rules", null) != null ? {
-        for rule_key, rule in ruleset.rules : rule_key => merge(rule, {
-          ep_key      = ep_key
-          ruleset_key = ruleset_key
-          rule_key    = rule_key
-        })
-      } : {}
-    ] : []
-  ])...)
+  for_each = local.rules != {} ? { for rule in try(local.rules, {}) : rule.key => rule } : {}
 
-  name = coalesce(
-    lookup(each.value, "name", null),
-    "${var.naming.private_dns_resolver_forwarding_rule}-${each.key}"
-  )
-
+  name                      = each.value.name
   dns_forwarding_ruleset_id = azurerm_private_dns_resolver_dns_forwarding_ruleset.sets["${each.value.ep_key}-${each.value.ruleset_key}"].id
   domain_name               = each.value.domain_name
-  enabled                   = each.value.state == "Enabled" ? true : false
+  enabled                   = each.value.enabled
+  metadata                  = each.value.metadata
 
   dynamic "target_dns_servers" {
-    for_each = each.value.destination_ip_addresses
+    for_each = each.value.target_dns_servers
     content {
-      ip_address = target_dns_servers.key
-      port       = target_dns_servers.value
+      ip_address = target_dns_servers.value.ip_address
+      port       = target_dns_servers.value.port
     }
   }
 }
 
 # virtual network links
 resource "azurerm_private_dns_resolver_virtual_network_link" "links" {
-  for_each = merge(flatten([
-    for ep_key, ep in lookup(var.instance, "outbound_endpoints", {}) :
-    lookup(ep, "forwarding_ruleset", null) != null ? [
-      for ruleset_key, ruleset in lookup(ep, "forwarding_ruleset", {}) :
-      lookup(ruleset, "virtual_network_links", null) != null ? {
-        for link_key, link in ruleset.virtual_network_links :
-        link_key => merge(link, {
-          ruleset_key = "${ep_key}-${ruleset_key}"
-          link_key    = link_key
-        })
-      } : {}
-    ] : []
-  ])...)
+  for_each = local.links != {} ? { for link_key, link in local.links : link_key => link } : {}
 
-  name = coalesce(
-    lookup(each.value, "name", null),
-    "${var.naming.private_dns_resolver_virtual_network_link}-${each.value.link_key}"
-  )
-
+  name                      = each.value.name
   dns_forwarding_ruleset_id = azurerm_private_dns_resolver_dns_forwarding_ruleset.sets[each.value.ruleset_key].id
   virtual_network_id        = each.value.virtual_network_id
 }
