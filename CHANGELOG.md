@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.2.0...v2.2.1) (2024-12-16)
+
+
+### Bug Fixes
+
+* refactor rules and vnet links within fw rulesets, updated docs ([#16](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/16)) ([fc8fe15](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/fc8fe15afee515ce2e7ada0d39764c3737f3423e))
+
 ## [2.2.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.1.0...v2.2.0) (2024-11-12)
 
 
