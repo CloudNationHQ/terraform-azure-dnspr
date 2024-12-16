@@ -17,13 +17,21 @@ instance = object({
   })))
   outbound_endpoints = optional(map(object({
     subnet_id = string
-    forwarding_ruleset = optional(map(object({
+    forwarding_rulesets = optional(map(object({
       rules = optional(map(object({
-        domain_name              = string
-        state                    = string
-        destination_ip_addresses = map(string)
+        domain_name         = string
+        enabled             = bool
+        metadata            = optional(map(object))
+        target_dns_servers  = map(object{
+          ip_address  = string
+          port        = optional(number, 53)
+        })
       })))
     })))
   })))
 })
 ```
+
+## Notes
+
+Only port 53 can be set as the target port for the dns forward rule, therefore this will be set as default from the module if not provided.

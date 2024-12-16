@@ -19,7 +19,7 @@ module "rg" {
 
 module "network" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 4.0"
+  version = "~> 8.0"
 
   naming = local.naming
 
@@ -27,11 +27,11 @@ module "network" {
     name           = module.naming.virtual_network.name
     location       = module.rg.groups.demo.location
     resource_group = module.rg.groups.demo.name
-    cidr           = ["10.19.0.0/16"]
+    address_space  = ["10.19.0.0/16"]
 
     subnets = {
       inbound = {
-        cidr = ["10.19.100.0/27"]
+        address_prefixes = ["10.19.100.0/27"]
         delegations = {
           dns = {
             name = "Microsoft.Network/dnsResolvers"
@@ -42,7 +42,7 @@ module "network" {
         }
       }
       outbound = {
-        cidr = ["10.19.101.0/27"]
+        address_prefixes = ["10.19.101.0/27"]
         delegations = {
           dns = {
             name = "Microsoft.Network/dnsResolvers"
