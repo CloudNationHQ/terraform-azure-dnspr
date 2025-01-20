@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.3.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.2.1...v2.3.0) (2025-01-20)
+
+
+### Features
+
+* **deps:** bump github.com/gruntwork-io/terratest in /tests ([#19](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/19)) ([8072e6b](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/8072e6b73f9a22250c4c95a4efd1f7ef4d0b2aff))
+* **deps:** bump golang.org/x/crypto from 0.29.0 to 0.31.0 in /tests ([#22](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/22)) ([3eba427](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/3eba427551e9d6e0545379d68a9c003c4917c745))
+* **deps:** bump golang.org/x/net from 0.31.0 to 0.33.0 in /tests ([#23](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/23)) ([74c5176](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/74c51767b3856e468aceeb193d78b40d433cfd09))
+* remove temporary files when deployment tests fails ([#20](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/20)) ([e09df92](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/e09df926727fb1850f052b7dc5e4ef18fd3f2816))
+
 ## [2.2.1](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.2.0...v2.2.1) (2024-12-16)
 
 
