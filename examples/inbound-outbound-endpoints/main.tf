@@ -1,6 +1,6 @@
 module "naming" {
   source  = "cloudnationhq/naming/azure"
-  version = "~> 0.1"
+  version = "~> 0.24"
 
   suffix = ["demo", "dev"]
 }
@@ -19,15 +19,15 @@ module "rg" {
 
 module "network" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 8.0"
+  version = "~> 9.0"
 
   naming = local.naming
 
   vnet = {
-    name           = module.naming.virtual_network.name
-    location       = module.rg.groups.demo.location
-    resource_group = module.rg.groups.demo.name
-    address_space  = ["10.19.0.0/16"]
+    name                = module.naming.virtual_network.name
+    location            = module.rg.groups.demo.location
+    resource_group_name = module.rg.groups.demo.name
+    address_space       = ["10.19.0.0/16"]
 
     subnets = {
       inbound = {
@@ -58,15 +58,15 @@ module "network" {
 
 module "dnsresolver" {
   source  = "cloudnationhq/dnspr/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   naming = local.naming
 
   instance = {
-    name               = module.naming.private_dns_resolver.name
-    location           = module.rg.groups.demo.location
-    resource_group     = module.rg.groups.demo.name
-    virtual_network_id = module.network.vnet.id
+    name                = module.naming.private_dns_resolver.name
+    location            = module.rg.groups.demo.location
+    resource_group_name = module.rg.groups.demo.name
+    virtual_network_id  = module.network.vnet.id
 
     inbound_endpoints = {
       ep1 = {
