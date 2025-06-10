@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.3.0...v3.0.0) (2025-06-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* The data structure changed, causing a recreate on existing resources.
+
+### Features
+
+* small refactor ([#30](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/30)) ([04104c3](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/04104c3fd026bd7f783f17489f6b05c57cc94689))
+
 ## [2.3.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.2.1...v2.3.0) (2025-01-20)
 
 
