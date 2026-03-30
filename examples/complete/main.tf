@@ -56,17 +56,31 @@ module "network_dnspr" {
   }
 }
 
-module "network_spoke" {
+module "network_spoke1" {
   source  = "cloudnationhq/vnet/azure"
   version = "~> 9.0"
 
   naming = local.naming
 
   vnet = {
-    name                = "vnet-demo-res2"
+    name                = "vnet-demo-spoke1"
     location            = module.rg.groups.demo.location
     resource_group_name = module.rg.groups.demo.name
     address_space       = ["10.20.0.0/16"]
+  }
+}
+
+module "network_spoke2" {
+  source  = "cloudnationhq/vnet/azure"
+  version = "~> 9.0"
+
+  naming = local.naming
+
+  vnet = {
+    name                = "vnet-demo-spoke2"
+    location            = module.rg.groups.demo.location
+    resource_group_name = module.rg.groups.demo.name
+    address_space       = ["10.21.0.0/16"]
   }
 }
 
@@ -97,8 +111,11 @@ module "dnsresolver" {
         forwarding_rulesets = {
           ruleset1 = {
             virtual_network_links = {
-              link1 = {
-                virtual_network_id = module.network_spoke.vnet.id
+              spoke1 = {
+                virtual_network_id = module.network_spoke1.vnet.id
+              }
+              spoke2 = {
+                virtual_network_id = module.network_spoke2.vnet.id
               }
             }
             rules = {
