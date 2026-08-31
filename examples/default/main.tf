@@ -7,7 +7,7 @@ module "naming" {
 
 module "rg" {
   source  = "cloudnationhq/rg/azure"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   groups = {
     demo = {
@@ -19,9 +19,7 @@ module "rg" {
 
 module "network" {
   source  = "cloudnationhq/vnet/azure"
-  version = "~> 9.0"
-
-  naming = local.naming
+  version = "~> 10.0"
 
   vnet = {
     name                = module.naming.virtual_network.name
@@ -33,9 +31,9 @@ module "network" {
 
 module "resolver" {
   source  = "cloudnationhq/dnspr/azure"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
-  instance = {
+  resolver = {
     name                = module.naming.private_dns_resolver.name
     location            = module.rg.groups.demo.location
     resource_group_name = module.rg.groups.demo.name

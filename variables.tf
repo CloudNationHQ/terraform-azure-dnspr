@@ -1,5 +1,5 @@
-variable "instance" {
-  description = "Contains private dns resolver instance configuration"
+variable "resolver" {
+  description = "contains all private dns resolver configuration"
   type = object({
     name                = string
     resource_group_name = optional(string, null)
@@ -38,21 +38,16 @@ variable "instance" {
       })), {})
     })), {})
   })
+
   validation {
-    condition     = var.instance.location != null || var.location != null
-    error_message = "location must be provided either in the object or as a separate variable."
+    condition     = lookup(var.resolver, "location", null) != null || var.location != null
+    error_message = "location must be set on var.resolver.location or on the module-level var.location."
   }
 
   validation {
-    condition     = var.instance.resource_group_name != null || var.resource_group_name != null
-    error_message = "resource group name must be provided either in the object or as a separate variable."
+    condition     = lookup(var.resolver, "resource_group_name", null) != null || var.resource_group_name != null
+    error_message = "resource_group_name must be set on var.resolver.resource_group_name or on the module-level var.resource_group_name."
   }
-}
-
-variable "naming" {
-  description = "contains naming convention"
-  type        = map(string)
-  default     = {}
 }
 
 variable "location" {
