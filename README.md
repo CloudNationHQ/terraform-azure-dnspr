@@ -55,37 +55,37 @@ Type:
 ```hcl
 object({
     name                = string
-    resource_group_name = optional(string, null)
-    location            = optional(string, null)
+    resource_group_name = optional(string)
+    location            = optional(string)
     virtual_network_id  = string
     tags                = optional(map(string))
     inbound_endpoints = optional(map(object({
-      name = optional(string, null)
+      name = optional(string)
       ip_configurations = optional(map(object({
         private_ip_allocation_method = optional(string, "Dynamic")
-        private_ip_address           = optional(string, null)
+        private_ip_address           = optional(string)
         subnet_id                    = string
       })), {})
     })), {})
     outbound_endpoints = optional(map(object({
-      name      = optional(string, null)
+      name      = optional(string)
       subnet_id = string
       forwarding_rulesets = optional(map(object({
-        name = optional(string, null)
-        tags = optional(map(string), null)
+        name = optional(string)
+        tags = optional(map(string))
         rules = optional(map(object({
-          name        = optional(string, null)
+          name        = optional(string)
           domain_name = string
-          enabled     = optional(bool, null)
-          metadata    = optional(map(string), null)
+          enabled     = optional(bool)
+          metadata    = optional(map(string))
           target_dns_servers = map(object({
             ip_address = string
             port       = optional(number, 53)
           }))
         })), {})
         virtual_network_links = optional(map(object({
-          name               = optional(string, null)
-          metadata           = optional(map(string), null)
+          name               = optional(string)
+          metadata           = optional(map(string))
           virtual_network_id = string
         })), {})
       })), {})
@@ -166,11 +166,7 @@ To update the module's documentation run `make doc`
 
 We welcome contributions from the community! Whether it's reporting a bug, suggesting a new feature, or submitting a pull request, your input is highly valued.
 
-For more information, please see our contribution [guidelines](./CONTRIBUTING.md). <br><br>
-
-<a href="https://github.com/cloudnationhq/terraform-azure-dnspr/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=cloudnationhq/terraform-azure-dnspr" />
-</a>
+For more information, please see our contribution [guidelines](./CONTRIBUTING.md).
 
 ## License
 
@@ -179,4 +175,3 @@ MIT Licensed. See [LICENSE](https://github.com/cloudnationhq/terraform-azure-dns
 ## References
 
 - [Documentation](https://learn.microsoft.com/en-us/azure/dns/dns-private-resolver-overview)
-- [Rest Api](https://learn.microsoft.com/en-us/rest/api/dns/dnsresolver/operation-groups?view=rest-dns-dnsresolver-2020-04-01-preview)

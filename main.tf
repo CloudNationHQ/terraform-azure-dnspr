@@ -1,19 +1,34 @@
 # private dns resolver
 resource "azurerm_private_dns_resolver" "this" {
-  name                = var.resolver.name
-  resource_group_name = coalesce(var.resolver.resource_group_name, var.resource_group_name)
-  location            = coalesce(var.resolver.location, var.location)
-  virtual_network_id  = var.resolver.virtual_network_id
+  resource_group_name = coalesce(
+    var.resolver.resource_group_name, var.resource_group_name
+  )
 
-  tags = coalesce(var.resolver.tags, var.tags)
+  location = coalesce(
+    var.resolver.location, var.location
+  )
+
+  tags = coalesce(
+    var.resolver.tags, var.tags
+  )
+
+  name               = var.resolver.name
+  virtual_network_id = var.resolver.virtual_network_id
+
 }
 
 # inbound endpoints
 resource "azurerm_private_dns_resolver_inbound_endpoint" "this" {
   for_each = var.resolver.inbound_endpoints
 
-  name                    = coalesce(each.value.name, each.key)
-  location                = coalesce(var.resolver.location, var.location)
+  name = coalesce(
+    each.value.name, each.key
+  )
+
+  location = coalesce(
+    var.resolver.location, var.location
+  )
+
   private_dns_resolver_id = azurerm_private_dns_resolver.this.id
 
   dynamic "ip_configurations" {
@@ -26,19 +41,29 @@ resource "azurerm_private_dns_resolver_inbound_endpoint" "this" {
     }
   }
 
-  tags = coalesce(var.resolver.tags, var.tags)
+  tags = coalesce(
+    var.resolver.tags, var.tags
+  )
 }
 
 # outbound endpoints
 resource "azurerm_private_dns_resolver_outbound_endpoint" "this" {
   for_each = var.resolver.outbound_endpoints
 
-  name                    = coalesce(each.value.name, each.key)
-  location                = coalesce(var.resolver.location, var.location)
+  name = coalesce(
+    each.value.name, each.key
+  )
+
+  location = coalesce(
+    var.resolver.location, var.location
+  )
+
   private_dns_resolver_id = azurerm_private_dns_resolver.this.id
   subnet_id               = each.value.subnet_id
 
-  tags = coalesce(var.resolver.tags, var.tags)
+  tags = coalesce(
+    var.resolver.tags, var.tags
+  )
 }
 
 # forwarding rulesets
@@ -50,19 +75,28 @@ resource "azurerm_private_dns_resolver_dns_forwarding_ruleset" "this" {
           key             = "${ep_key}-${ruleset_key}"
           ruleset_key     = ruleset_key
           outbound_ep_key = ep_key
-          name            = coalesce(ruleset.name, ruleset_key)
+          name = coalesce(
+            ruleset.name, ruleset_key
+          )
         }
       ]
     ]) : item.key => item
   }
 
-  name                = each.value.name
-  resource_group_name = coalesce(var.resolver.resource_group_name, var.resource_group_name)
-  location            = coalesce(var.resolver.location, var.location)
-
+  name                                       = each.value.name
   private_dns_resolver_outbound_endpoint_ids = [azurerm_private_dns_resolver_outbound_endpoint.this[each.value.outbound_ep_key].id]
 
-  tags = coalesce(var.resolver.tags, var.tags)
+  resource_group_name = coalesce(
+    var.resolver.resource_group_name, var.resource_group_name
+  )
+
+  location = coalesce(
+    var.resolver.location, var.location
+  )
+
+  tags = coalesce(
+    var.resolver.tags, var.tags
+  )
 }
 
 # forwarding rules
@@ -77,7 +111,9 @@ resource "azurerm_private_dns_resolver_forwarding_rule" "this" {
             domain_name = rule.domain_name
             enabled     = rule.enabled
             metadata    = rule.metadata
-            name        = coalesce(rule.name, rule_key)
+            name = coalesce(
+              rule.name, rule_key
+            )
             target_dns_servers = [
               for target_key, target in rule.target_dns_servers : {
                 ip_address = target.ip_address

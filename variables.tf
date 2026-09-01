@@ -2,37 +2,37 @@ variable "resolver" {
   description = "contains all private dns resolver configuration"
   type = object({
     name                = string
-    resource_group_name = optional(string, null)
-    location            = optional(string, null)
+    resource_group_name = optional(string)
+    location            = optional(string)
     virtual_network_id  = string
     tags                = optional(map(string))
     inbound_endpoints = optional(map(object({
-      name = optional(string, null)
+      name = optional(string)
       ip_configurations = optional(map(object({
         private_ip_allocation_method = optional(string, "Dynamic")
-        private_ip_address           = optional(string, null)
+        private_ip_address           = optional(string)
         subnet_id                    = string
       })), {})
     })), {})
     outbound_endpoints = optional(map(object({
-      name      = optional(string, null)
+      name      = optional(string)
       subnet_id = string
       forwarding_rulesets = optional(map(object({
-        name = optional(string, null)
-        tags = optional(map(string), null)
+        name = optional(string)
+        tags = optional(map(string))
         rules = optional(map(object({
-          name        = optional(string, null)
+          name        = optional(string)
           domain_name = string
-          enabled     = optional(bool, null)
-          metadata    = optional(map(string), null)
+          enabled     = optional(bool)
+          metadata    = optional(map(string))
           target_dns_servers = map(object({
             ip_address = string
             port       = optional(number, 53)
           }))
         })), {})
         virtual_network_links = optional(map(object({
-          name               = optional(string, null)
-          metadata           = optional(map(string), null)
+          name               = optional(string)
+          metadata           = optional(map(string))
           virtual_network_id = string
         })), {})
       })), {})
@@ -40,13 +40,13 @@ variable "resolver" {
   })
 
   validation {
-    condition     = lookup(var.resolver, "location", null) != null || var.location != null
-    error_message = "location must be set on var.resolver.location or on the module-level var.location."
+    condition     = var.resolver.location != null || var.location != null
+    error_message = "location must be provided either in the resolver object or as a separate variable."
   }
 
   validation {
-    condition     = lookup(var.resolver, "resource_group_name", null) != null || var.resource_group_name != null
-    error_message = "resource_group_name must be set on var.resolver.resource_group_name or on the module-level var.resource_group_name."
+    condition     = var.resolver.resource_group_name != null || var.resource_group_name != null
+    error_message = "resource group name must be provided either in the resolver object or as a separate variable."
   }
 }
 
