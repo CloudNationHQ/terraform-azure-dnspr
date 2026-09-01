@@ -23,69 +23,69 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 5.0)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 4.0)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 5.0)
 
 ## Resources
 
 The following resources are used by this module:
 
-- [azurerm_private_dns_resolver.resolver](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) (resource)
-- [azurerm_private_dns_resolver_dns_forwarding_ruleset.sets](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_dns_forwarding_ruleset) (resource)
-- [azurerm_private_dns_resolver_forwarding_rule.rules](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_forwarding_rule) (resource)
-- [azurerm_private_dns_resolver_inbound_endpoint.inbound](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_inbound_endpoint) (resource)
-- [azurerm_private_dns_resolver_outbound_endpoint.outbound](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_outbound_endpoint) (resource)
-- [azurerm_private_dns_resolver_virtual_network_link.links](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_virtual_network_link) (resource)
+- [azurerm_private_dns_resolver.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver) (resource)
+- [azurerm_private_dns_resolver_dns_forwarding_ruleset.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_dns_forwarding_ruleset) (resource)
+- [azurerm_private_dns_resolver_forwarding_rule.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_forwarding_rule) (resource)
+- [azurerm_private_dns_resolver_inbound_endpoint.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_inbound_endpoint) (resource)
+- [azurerm_private_dns_resolver_outbound_endpoint.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_outbound_endpoint) (resource)
+- [azurerm_private_dns_resolver_virtual_network_link.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_dns_resolver_virtual_network_link) (resource)
 
 ## Required Inputs
 
 The following input variables are required:
 
-### <a name="input_instance"></a> [instance](#input\_instance)
+### <a name="input_resolver"></a> [resolver](#input\_resolver)
 
-Description: Contains private dns resolver instance configuration
+Description: contains all private dns resolver configuration
 
 Type:
 
 ```hcl
 object({
     name                = string
-    resource_group_name = optional(string, null)
-    location            = optional(string, null)
+    resource_group_name = optional(string)
+    location            = optional(string)
     virtual_network_id  = string
     tags                = optional(map(string))
     inbound_endpoints = optional(map(object({
-      name = optional(string, null)
+      name = optional(string)
       ip_configurations = optional(map(object({
         private_ip_allocation_method = optional(string, "Dynamic")
-        private_ip_address           = optional(string, null)
+        private_ip_address           = optional(string)
         subnet_id                    = string
       })), {})
     })), {})
     outbound_endpoints = optional(map(object({
-      name      = optional(string, null)
+      name      = optional(string)
       subnet_id = string
       forwarding_rulesets = optional(map(object({
-        name = optional(string, null)
-        tags = optional(map(string), null)
+        name = optional(string)
+        tags = optional(map(string))
         rules = optional(map(object({
-          name        = optional(string, null)
+          name        = optional(string)
           domain_name = string
-          enabled     = optional(bool, null)
-          metadata    = optional(map(string), null)
+          enabled     = optional(bool)
+          metadata    = optional(map(string))
           target_dns_servers = map(object({
             ip_address = string
             port       = optional(number, 53)
           }))
         })), {})
         virtual_network_links = optional(map(object({
-          name               = optional(string, null)
-          metadata           = optional(map(string), null)
+          name               = optional(string)
+          metadata           = optional(map(string))
           virtual_network_id = string
         })), {})
       })), {})
@@ -104,14 +104,6 @@ Description: default azure region to be used.
 Type: `string`
 
 Default: `null`
-
-### <a name="input_naming"></a> [naming](#input\_naming)
-
-Description: contains naming convention
-
-Type: `map(string)`
-
-Default: `{}`
 
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 
@@ -141,13 +133,13 @@ Description: contains private dns resolver dns forwarding ruleset configuration
 
 Description: contains private dns resolver inbound endpoints configuration
 
-### <a name="output_instance"></a> [instance](#output\_instance)
-
-Description: contains private dns resolver instance configuration
-
 ### <a name="output_outbound_endpoints"></a> [outbound\_endpoints](#output\_outbound\_endpoints)
 
 Description: contains private dns resolver outbound endpoints configuration
+
+### <a name="output_resolver"></a> [resolver](#output\_resolver)
+
+Description: contains private dns resolver configuration
 
 ### <a name="output_virtual_network_links"></a> [virtual\_network\_links](#output\_virtual\_network\_links)
 
@@ -174,11 +166,7 @@ To update the module's documentation run `make doc`
 
 We welcome contributions from the community! Whether it's reporting a bug, suggesting a new feature, or submitting a pull request, your input is highly valued.
 
-For more information, please see our contribution [guidelines](./CONTRIBUTING.md). <br><br>
-
-<a href="https://github.com/cloudnationhq/terraform-azure-dnspr/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=cloudnationhq/terraform-azure-dnspr" />
-</a>
+For more information, please see our contribution [guidelines](./CONTRIBUTING.md).
 
 ## License
 
@@ -187,4 +175,3 @@ MIT Licensed. See [LICENSE](https://github.com/cloudnationhq/terraform-azure-dns
 ## References
 
 - [Documentation](https://learn.microsoft.com/en-us/azure/dns/dns-private-resolver-overview)
-- [Rest Api](https://learn.microsoft.com/en-us/rest/api/dns/dnsresolver/operation-groups?view=rest-dns-dnsresolver-2020-04-01-preview)
