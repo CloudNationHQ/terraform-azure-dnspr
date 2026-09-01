@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v3.0.0...v4.0.0) (2026-09-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* Upgrade to azurerm v5 ([#34](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/34))
+
+### Features
+
+* Upgrade to azurerm v5 ([#34](https://github.com/CloudNationHQ/terraform-azure-dnspr/issues/34)) ([7533dce](https://github.com/CloudNationHQ/terraform-azure-dnspr/commit/7533dce0dc67a66b63b68a428274c44f6299b9ac))
+
 ## [3.0.0](https://github.com/CloudNationHQ/terraform-azure-dnspr/compare/v2.3.0...v3.0.0) (2025-06-10)
 
 
